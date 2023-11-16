@@ -26,6 +26,14 @@ mongoose.connect(uri, {
     console.error("MongoDB connection error:", error.message);
 });
 
+// Firebase Connection
+var admin = require("firebase-admin");
+var serviceAccount = require("path/to/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
 // Routes
 app.use('/api/users', usersRoutes);
 app.use('/api/movies', moviesRoutes);
