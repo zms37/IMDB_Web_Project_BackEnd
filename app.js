@@ -28,7 +28,7 @@ mongoose.connect(uri, {
 
 // Firebase Connection
 var admin = require("firebase-admin");
-var serviceAccount = require("path/to/serviceAccountKey.json");
+var serviceAccount = require("./filmhub-53ea4-firebase-adminsdk-ck4qb-ff2675ab05.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
