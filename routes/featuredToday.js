@@ -2,22 +2,35 @@ const express = require('express');
 const router = express.Router();
 const Movie = require('../models/Movie'); // Import your Movie model
 
-// Featured Today
-router.get('/featuredToday', async (req, res) => {
+const movies = [
+    {
+      title: 'Movie 1',
+      genres: ['Action', 'Adventure'],
+      director: '60d5ec9af682fbd39cc1abcd', // Mock ObjectId
+      writer: '60d5ec9af682fbd39cc1abce', // Mock ObjectId
+      releaseYear: 2022,
+      posterImage: 'https://example.com/poster1.jpg',
+      trailerUrl: 'https://example.com/trailer1.mp4'
+    },
+    {
+      title: 'Movie 2',
+      genres: ['Drama', 'Thriller'],
+      director: '60d5ec9af682fbd39cc1abcf', // Mock ObjectId
+      writer: '60d5ec9af682fbd39cc1abd0', // Mock ObjectId
+      releaseYear: 2023,
+      posterImage: 'https://example.com/poster2.jpg',
+      trailerUrl: 'https://example.com/trailer2.mp4'
+    },
+    // ...more movies
+  ];
+
+  router.get('/featuredToday', async (req, res) => {
     try {
-        const currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0); // Set the time to 00:00:00
-        const tomorrowDate = new Date(currentDate);
-        tomorrowDate.setDate(tomorrowDate.getDate() + 1); // Set the date to tomorrow
+        // Code to filter the mock data based on some criteria, e.g., featuredDate
+        // Since your mock data doesn't include a 'featuredDate' field, this part needs to be adapted
+        const featuredMovies = movies;
 
-        const movies = await Movie.find({
-            featuredDate: {
-                $gte: currentDate,
-                $lt: tomorrowDate
-            }
-        });
-
-        res.json(movies);
+        res.json(featuredMovies);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
