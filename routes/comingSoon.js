@@ -3,7 +3,7 @@ const router = express.Router();
 const Movie = require('../models/Movie'); // Import your Movie model
 
 // Coming Soon
-router.get('/comingSoon', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const currentDate = new Date();
         const movies = await Movie.find({ releaseDate: { $gt: currentDate } });

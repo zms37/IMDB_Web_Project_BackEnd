@@ -3,7 +3,7 @@ const router = express.Router();
 const Movie = require('../models/Movie'); // Import your Movie model
 
 // Recently Added Movies (Top five)
-router.get('/recentlyAddedMovies', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const movies = await Movie.find().sort({ addedDate: -1 }).limit(5);
         res.json(movies);

@@ -7,7 +7,8 @@ const movieSchema = new mongoose.Schema({
     writer: { type: mongoose.Schema.Types.ObjectId, ref: 'Writer' },
     releaseYear: Number,
     posterImage: String,
-    trailerUrl: String
+    trailerUrl: String,
+    actor: { type: mongoose.Schema.Types.ObjectId, ref: 'Actor' },
 });
 
 module.exports = mongoose.model('Movie', movieSchema);

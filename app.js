@@ -40,6 +40,7 @@ admin.initializeApp({
 // Routes
 app.use('/api/users', usersRoutes);
 app.use('/api/movies', moviesRoutes);
+app.use('/api/featuredToday', featuredTodayRouter);
 // ... use other routes
 
 // Serve static files from the React frontend app

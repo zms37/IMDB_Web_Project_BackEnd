@@ -4,7 +4,7 @@ const User = require('../models/user'); // Import your User model
 const Movie = require('../models/Movie'); // Import your Movie model
 
 // Add to Watchlist
-router.post('/users/:userId/watchlist', async (req, res) => {
+router.post('/users/:userId/UserWatchlist', async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
         const movie = await Movie.findById(req.body.movieId);
