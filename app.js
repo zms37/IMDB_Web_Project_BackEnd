@@ -7,6 +7,13 @@ const path = require('path'); // Added to use the path module
 const usersRoutes = require('./routes/users');
 const moviesRoutes = require('./routes/movies');
 const featuredTodayRouter = require('./routes/featuredToday');
+const actorsRoutes = require('./routes/actor');
+const directorsRoutes = require('./routes/actor');
+const genresRoutes = require('./routes/genre');
+const reviewsRoutes = require('./routes/review');
+const userWatchlistRoutes = require('./routes/UserWatchlist');
+const writersRoutes = require('./routes/writer');
+const userTopPicksRoutes = require('./routes/userTopPicks');
 // ... import other routes as needed
 
 const app = express();
@@ -16,7 +23,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use('/featuredToday', featuredTodayRouter);
 
 // MongoDB Connection
 const uri = "mongodb+srv://ZakMo:ZakariaNajdi278@cluster0.bbbnekm.mongodb.net/?retryWrites=true&w=majority";
@@ -41,6 +47,14 @@ admin.initializeApp({
 app.use('/api/users', usersRoutes);
 app.use('/api/movies', moviesRoutes);
 app.use('/api/featuredToday', featuredTodayRouter);
+app.use('/api/actors', actorsRoutes);
+app.use('/api/directors', directorsRoutes);
+app.use('/api/genres', genresRoutes);
+app.use('/api/reviews', reviewsRoutes);
+app.use('/api/UserWatchlist', userWatchlistRoutes);
+app.use('/api/writers', writersRoutes);
+app.use('/api/userTopPicks', userTopPicksRoutes);
+app.use('/api/writers', writersRoutes);
 // ... use other routes
 
 // Serve static files from the React frontend app

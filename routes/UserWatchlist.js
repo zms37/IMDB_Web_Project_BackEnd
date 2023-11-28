@@ -1,15 +1,43 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user'); // Import your User model
+const UserWatchlist = require('../models/userWatchlist'); // Adjust the path as needed
 
-// User's Watchlist
-router.get('/users/:userId/watchlist', async (req, res) => {
+// Get watchlist for a user
+router.get('/:userId', async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
-        if (user) {
-            res.json(user.watchlist);
+        const watchlist = await UserWatchlist.findOne({ user: req.params.userId }).populate('movies');
+        res.json(watchlist);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Add or update watchlist for a user
+router.post('/:userId', async (req, res) => {
+    try {
+        let watchlist = await UserWatchlist.findOne({ user: req.params.userId });
+        if (!watchlist) {
+            // Create new watchlist if it doesn't exist
+            watchlist = new UserWatchlist({ user: req.params.userId, movies: req.body.movies });
         } else {
-            res.status(404).json({ message: 'User not found' });
+            // Update existing watchlist
+            watchlist.movies = req.body.movies;
+        }
+        const updatedWatchlist = await watchlist.save();
+        res.status(201).json(updatedWatchlist);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// Delete watchlist for a user
+router.delete('/:userId', async (req, res) => {
+    try {
+        const result = await UserWatchlist.findOneAndDelete({ user: req.params.userId });
+        if (result) {
+            res.json({ message: 'User watchlist deleted' });
+        } else {
+            res.status(404).json({ message: 'User watchlist not found' });
         }
     } catch (err) {
         res.status(500).json({ message: err.message });

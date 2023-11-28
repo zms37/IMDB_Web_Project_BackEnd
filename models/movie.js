@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
 
 const movieSchema = new mongoose.Schema({
+    tmdbId: String,
     title: String,
     genres: [String],
-    director: { type: mongoose.Schema.Types.ObjectId, ref: 'Director' },
-    writer: { type: mongoose.Schema.Types.ObjectId, ref: 'Writer' },
+    director: Number,
+    writer: Number,
     releaseYear: Number,
     posterImage: String,
     trailerUrl: String,
-    actor: { type: mongoose.Schema.Types.ObjectId, ref: 'Actor' },
-});
+    actor: [Number],
+    rating: Number,
+    description: [String],
+}, { timestamps: true }); // This adds createdAt and updatedAt fields automatically
 
-module.exports = mongoose.model('Movie', movieSchema);
+module.exports = mongoose.model('movie', movieSchema);

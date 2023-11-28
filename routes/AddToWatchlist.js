@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user'); // Import your User model
-const Movie = require('../models/Movie'); // Import your Movie model
+const Movie = require('../models/movie'); // Import your Movie model
 
 // Add to Watchlist
 router.post('/users/:userId/UserWatchlist', async (req, res) => {

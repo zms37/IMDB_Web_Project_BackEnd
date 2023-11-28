@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Movie = require('../models/Movie'); // Import your Movie model
+const Movie = require('../models/movie'); // Import your Movie model
 
 // Box Office
 router.get('/', async (req, res) => {
