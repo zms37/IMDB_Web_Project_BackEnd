@@ -1,23 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const Movie = require('../models/movie'); // Import your Movie model
+const Movie = require('../models/movie'); // Adjust the path as necessary
 
-// Mock movies data
-let movies = [
-    { id: 1, title: 'Movie 1', director: 'Director 1', year: 2000 },
-    { id: 2, title: 'Movie 2', director: 'Director 2', year: 2001 },
-    // ... add more movies as needed
-];
+// Middleware to check if the cache should be refreshed
+const cacheMiddleware = (req, res, next) => {
+    const today = new Date().setHours(0, 0, 0, 0);
+    if (!global.featuredCache || global.featuredCache.date !== today) {
+        global.featuredCache = { date: today };
+        next();
+    } else {
+        res.json(global.featuredCache.movies);
+    }
+};
 
-  router.get('/', async (req, res) => {
+router.get('/', cacheMiddleware, async (req, res) => {
     try {
-        // Code to filter the mock data based on some criteria, e.g., featuredDate
-        // Since your mock data doesn't include a 'featuredDate' field, this part needs to be adapted
-        const featuredMovies = movies;
-
-        res.json(featuredMovies);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+        if (!global.featuredCache.movies) {
+            const movies = await Movie.aggregate([
+                { $sample: { size: 10 } }
+            ]);
+            global.featuredCache.movies = movies;
+        }
+        res.json(global.featuredCache.movies);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 

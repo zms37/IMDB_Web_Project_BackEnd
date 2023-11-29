@@ -3,18 +3,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path'); // Added to use the path module
 
-// Import routes
-const usersRoutes = require('./routes/users');
-const moviesRoutes = require('./routes/movies');
-const featuredTodayRouter = require('./routes/featuredToday');
-const actorsRoutes = require('./routes/actor');
-const directorsRoutes = require('./routes/actor');
-const genresRoutes = require('./routes/genre');
-const reviewsRoutes = require('./routes/review');
-const userWatchlistRoutes = require('./routes/UserWatchlist');
-const writersRoutes = require('./routes/writer');
-const userTopPicksRoutes = require('./routes/userTopPicks');
-// ... import other routes as needed
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -42,6 +30,20 @@ var serviceAccount = require("./filmhub-53ea4-firebase-adminsdk-ck4qb-ff2675ab05
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
+// Import routes
+const usersRoutes = require('./routes/users');
+const moviesRoutes = require('./routes/movies');
+const featuredTodayRouter = require('./routes/featuredToday');
+const actorsRoutes = require('./routes/actor');
+const directorsRoutes = require('./routes/actor');
+const genresRoutes = require('./routes/genre');
+const reviewsRoutes = require('./routes/review');
+const userWatchlistRoutes = require('./routes/UserWatchlist');
+const writersRoutes = require('./routes/writer');
+const userTopPicksRoutes = require('./routes/userTopPicks');
+const recentlyAddMoivesRoutes = require('./routes/recentlyAddMoives');
+const comingSoonRoutes = require('./routes/comingSoon');
+// ... import other routes as needed
 
 // Routes
 app.use('/api/users', usersRoutes);
@@ -52,9 +54,10 @@ app.use('/api/directors', directorsRoutes);
 app.use('/api/genres', genresRoutes);
 app.use('/api/reviews', reviewsRoutes);
 app.use('/api/UserWatchlist', userWatchlistRoutes);
-app.use('/api/writers', writersRoutes);
 app.use('/api/userTopPicks', userTopPicksRoutes);
 app.use('/api/writers', writersRoutes);
+app.use('/api/recentlyAddMoives', recentlyAddMoivesRoutes);
+app.use('/api/comingSoon', comingSoonRoutes);
 // ... use other routes
 
 // Serve static files from the React frontend app

@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const Movie = require('../models/movie'); // Import your Movie model
+const Movie = require('../models/movie'); // Adjust the path as necessary
 
-// Coming Soon
 router.get('/', async (req, res) => {
     try {
-        const currentDate = new Date();
-        const movies = await Movie.find({ releaseDate: { $gt: currentDate } });
-        res.json(movies);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+        const currentYear = new Date().getFullYear();
+        const upcomingMovies = await Movie.find({ releaseYear: { $gt: currentYear } });
+
+        res.json(upcomingMovies);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 
