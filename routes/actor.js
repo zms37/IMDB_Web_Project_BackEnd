@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get one actor
+// Get one actor by custom ID
 router.get('/:id', getActor, (req, res) => {
     res.json(res.actor);
 });
@@ -20,6 +20,7 @@ router.get('/:id', getActor, (req, res) => {
 // Create an actor
 router.post('/', async (req, res) => {
     const actor = new Actor({
+        id: req.body.id, // Make sure to get the ID from the request
         name: req.body.name,
         biography: req.body.biography,
         dateOfBirth: req.body.dateOfBirth,
@@ -59,11 +60,11 @@ router.delete('/:id', getActor, async (req, res) => {
     }
 });
 
-// Middleware to get actor by ID
+// Middleware to get actor by custom ID
 async function getActor(req, res, next) {
     let actor;
     try {
-        actor = await Actor.findById(req.params.id);
+        actor = await Actor.findOne({ id: req.params.id });
         if (actor == null) {
             return res.status(404).json({ message: 'Cannot find actor' });
         }

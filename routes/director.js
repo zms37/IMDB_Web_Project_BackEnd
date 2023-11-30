@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get one director
+// Get one director by custom ID
 router.get('/:id', getDirector, (req, res) => {
     res.json(res.director);
 });
@@ -20,6 +20,7 @@ router.get('/:id', getDirector, (req, res) => {
 // Create a director
 router.post('/', async (req, res) => {
     const director = new Director({
+        id: req.body.id, // Assuming you're sending a custom ID
         name: req.body.name,
         biography: req.body.biography,
         dateOfBirth: req.body.dateOfBirth
@@ -58,11 +59,11 @@ router.delete('/:id', getDirector, async (req, res) => {
     }
 });
 
-// Middleware to get director by ID
+// Middleware to get director by custom ID
 async function getDirector(req, res, next) {
     let director;
     try {
-        director = await Director.findById(req.params.id);
+        director = await Director.findOne({ id: req.params.id });
         if (director == null) {
             return res.status(404).json({ message: 'Cannot find director' });
         }

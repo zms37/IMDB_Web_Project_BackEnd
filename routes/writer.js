@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get one writer by ID
+// Get one writer by custom ID
 router.get('/:id', getWriter, (req, res) => {
     res.json(res.writer);
 });
@@ -20,7 +20,7 @@ router.get('/:id', getWriter, (req, res) => {
 // Create a new writer
 router.post('/', async (req, res) => {
     const writer = new Writer({
-        id: req.body.id,
+        id: req.body.id, // Using custom ID from request body
         name: req.body.name,
         biography: req.body.biography,
         dateOfBirth: req.body.dateOfBirth
@@ -59,11 +59,11 @@ router.delete('/:id', getWriter, async (req, res) => {
     }
 });
 
-// Middleware to get writer by ID
+// Middleware to get writer by custom ID
 async function getWriter(req, res, next) {
     let writer;
     try {
-        writer = await Writer.findById(req.params.id);
+        writer = await Writer.findOne({ id: req.params.id });
         if (writer == null) {
             return res.status(404).json({ message: 'Cannot find writer' });
         }

@@ -14,6 +14,10 @@ router.get('/', async (req, res) => {
 
 // Get one movie
 router.get('/:id', getMovie, (req, res) => {
+    if (!res.movie) {
+        console.error("Error fetching movie: Movie not found");
+        return res.status(404).send("Movie not found");
+    }
     res.json(res.movie);
 });
 
