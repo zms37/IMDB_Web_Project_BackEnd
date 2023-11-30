@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Movie = require('../models/movie'); // Adjust the path as needed
+const Movie = require('../models/movie'); // Adjust the path as necessary
+
 
 // Get recently added movies
 router.get('/', async (req, res) => {

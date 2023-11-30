@@ -43,6 +43,7 @@ const writersRoutes = require('./routes/writer');
 const userTopPicksRoutes = require('./routes/userTopPicks');
 const recentlyAddMoivesRoutes = require('./routes/recentlyAddMoives');
 const comingSoonRoutes = require('./routes/comingSoon');
+const boxOfficeRoutes = require('./routes/BoxOffice');
 // ... import other routes as needed
 
 // Routes
@@ -58,6 +59,7 @@ app.use('/api/userTopPicks', userTopPicksRoutes);
 app.use('/api/writers', writersRoutes);
 app.use('/api/recentlyAddMoives', recentlyAddMoivesRoutes);
 app.use('/api/comingSoon', comingSoonRoutes);
+app.use('/api/boxOffice', boxOfficeRoutes);
 // ... use other routes
 
 // Serve static files from the React frontend app
