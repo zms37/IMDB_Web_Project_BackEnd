@@ -12,6 +12,7 @@ const movieSchema = new mongoose.Schema({
     actor: [Number],
     rating: Number,
     description: [String],
+    boxOffice: Number,
 }, { timestamps: true }); // This adds createdAt and updatedAt fields automatically
 
 module.exports = mongoose.model('movie', movieSchema);
