@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get a single genre by ID
+// Get a single genre by custom ID
 router.get('/:id', getGenre, (req, res) => {
     res.json(res.genre);
 });
@@ -20,7 +20,7 @@ router.get('/:id', getGenre, (req, res) => {
 // Create a new genre
 router.post('/', async (req, res) => {
     const genre = new Genre({
-        id: req.body.id,
+        id: req.body.id, // Using custom ID from request body
         name: req.body.name
     });
 
@@ -57,11 +57,11 @@ router.delete('/:id', getGenre, async (req, res) => {
     }
 });
 
-// Middleware to get genre by ID
+// Middleware to get genre by custom ID
 async function getGenre(req, res, next) {
     let genre;
     try {
-        genre = await Genre.findById(req.params.id);
+        genre = await Genre.findOne({ id: req.params.id });
         if (genre == null) {
             return res.status(404).json({ message: 'Cannot find genre' });
         }
