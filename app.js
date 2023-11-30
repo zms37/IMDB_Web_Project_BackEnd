@@ -61,10 +61,10 @@ app.use('/api/comingSoon', comingSoonRoutes);
 // ... use other routes
 
 // Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, '../IMDB_Clone_FrontEnd/build')));
+app.use(express.static(path.join(__dirname, '../imdbclone/build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../IMDB_Clone_FrontEnd/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../imdbclone/build', 'index.html'));
 });
 
 // Error Handling Middleware
