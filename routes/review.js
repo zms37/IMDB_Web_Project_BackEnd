@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Review = require('../models/review'); // Adjust the path as needed
+const Review = require('../models/review'); // Ensure this path is correct
 
 // Get all reviews
 router.get('/', async (req, res) => {
@@ -23,7 +23,6 @@ router.post('/', async (req, res) => {
         user: req.body.user,
         movie: req.body.movie,
         rating: req.body.rating,
-        title: req.body.title,
         content: req.body.content,
         dateAdded: req.body.dateAdded || new Date() // Use current date if not provided
     });
@@ -38,16 +37,7 @@ router.post('/', async (req, res) => {
 
 // Update a review
 router.patch('/:id', getReview, async (req, res) => {
-    if (req.body.rating != null) {
-        res.review.rating = req.body.rating;
-    }
-    if (req.body.title != null) {
-        res.review.title = req.body.title;
-    }
-    if (req.body.content != null) {
-        res.review.content = req.body.content;
-    }
-    // ... other fields as needed
+    // ... existing update logic ...
 
     try {
         const updatedReview = await res.review.save();
@@ -69,9 +59,8 @@ router.delete('/:id', getReview, async (req, res) => {
 
 // Middleware to get review by ID
 async function getReview(req, res, next) {
-    let review;
     try {
-        review = await Review.findById(req.params.id);
+        review = await Review.findById(req.params.id).populate('user').populate('movie');
         if (review == null) {
             return res.status(404).json({ message: 'Cannot find review' });
         }

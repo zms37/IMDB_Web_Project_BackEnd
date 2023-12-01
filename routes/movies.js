@@ -5,7 +5,7 @@ const Movie = require('../models/movie'); // Adjust the path as needed
 // Get all movies
 router.get('/', async (req, res) => {
     try {
-        const movies = await Movie.find();
+        const movies = await Movie.find().populate('reviews'); // Populate reviews if needed
         res.json(movies);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -14,10 +14,6 @@ router.get('/', async (req, res) => {
 
 // Get one movie
 router.get('/:id', getMovie, (req, res) => {
-    if (!res.movie) {
-        console.error("Error fetching movie: Movie not found");
-        return res.status(404).send("Movie not found");
-    }
     res.json(res.movie);
 });
 
@@ -34,7 +30,8 @@ router.post('/', async (req, res) => {
         trailerUrl: req.body.trailerUrl,
         actor: req.body.actor,
         rating: req.body.rating,
-        description: req.body.description
+        description: req.body.description,
+        // Don't include 'reviews' here as they are typically added separately
     });
 
     try {
@@ -47,13 +44,12 @@ router.post('/', async (req, res) => {
 
 // Update a movie
 router.patch('/:id', getMovie, async (req, res) => {
-    // Update logic goes here
-    // Check for each field if it's not null and update accordingly
-    // Example:
-    if (req.body.title != null) {
-        res.movie.title = req.body.title;
-    }
-    // ... other fields
+    // Update each field if provided in the request
+    Object.entries(req.body).forEach(([key, value]) => {
+        if (value != null) {
+            res.movie[key] = value;
+        }
+    });
 
     try {
         const updatedMovie = await res.movie.save();
@@ -75,9 +71,8 @@ router.delete('/:id', getMovie, async (req, res) => {
 
 // Middleware to get movie by ID
 async function getMovie(req, res, next) {
-    let movie;
     try {
-        movie = await Movie.findById(req.params.id);
+        movie = await Movie.findById(req.params.id).populate('reviews'); // Populate reviews if needed
         if (movie == null) {
             return res.status(404).json({ message: 'Cannot find movie' });
         }
