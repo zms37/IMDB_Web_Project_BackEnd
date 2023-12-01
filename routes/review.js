@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Review = require('../models/review'); // Ensure this path is correct
+const Review = require('../models/Review'); // Ensure this path is correct
 
 // Get all reviews
 router.get('/', async (req, res) => {
