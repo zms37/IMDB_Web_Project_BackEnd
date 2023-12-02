@@ -96,4 +96,40 @@ router.post('/:id/profile-picture', upload.single('profilePicture'), async (req,
   }
 });
 
+// check if user exists
+router.post('/check', async (req, res) => {
+    try {
+      const { username, email } = req.body;
+      const userExists = await User.findOne({ $or: [{ username: username }, { email: email }] });
+      if (userExists) {
+        res.json({ exists: true });
+      } else {
+        res.json({ exists: false });
+      }
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+
+// Get a user by username
+router.get('/username/:username', async (req, res) => {
+  try {
+      const user = await User.findOne({ username: req.params.username });
+      if (!user) return res.status(404).send('The user with the given username was not found.');
+      res.json(user);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+// Get a user by email
+router.get('/email/:email', async (req, res) => {
+  try {
+      const user = await User.findOne({ email: req.params.email });
+      if (!user) return res.status(404).send('The user with the given email was not found.');
+      res.json(user);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
 module.exports = router;
