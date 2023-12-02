@@ -72,4 +72,18 @@ async function getReview(req, res, next) {
     next();
 }
 
+// Get reviews by movie ID
+router.get('/movie/:movieId', async (req, res) => {
+    try {
+        const movieId = req.params.movieId;
+        const reviews = await Review.find({ movie: movieId })
+            .populate('user', 'username email') // Adjust fields as needed
+            .populate('movie', 'title genres'); // Adjust fields as needed
+        res.json(reviews);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
 module.exports = router;
