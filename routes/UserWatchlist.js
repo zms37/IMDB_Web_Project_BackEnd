@@ -1,11 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const UserWatchlist = require('../models/userWatchlist'); // Adjust the path as needed
+
+// Validate MongoDB ObjectId
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 // Get watchlist for a user
 router.get('/:userId', async (req, res) => {
+    if (!isValidObjectId(req.params.userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
     try {
         const watchlist = await UserWatchlist.findOne({ user: req.params.userId }).populate('movies');
+        if (!watchlist) {
+            return res.status(404).json({ message: 'User watchlist not found' });
+        }
         res.json(watchlist);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -14,13 +25,15 @@ router.get('/:userId', async (req, res) => {
 
 // Add or update watchlist for a user
 router.post('/:userId', async (req, res) => {
+    if (!isValidObjectId(req.params.userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
     try {
         let watchlist = await UserWatchlist.findOne({ user: req.params.userId });
         if (!watchlist) {
-            // Create new watchlist if it doesn't exist
             watchlist = new UserWatchlist({ user: req.params.userId, movies: req.body.movies });
         } else {
-            // Update existing watchlist
             watchlist.movies = req.body.movies;
         }
         const updatedWatchlist = await watchlist.save();
@@ -32,13 +45,16 @@ router.post('/:userId', async (req, res) => {
 
 // Delete watchlist for a user
 router.delete('/:userId', async (req, res) => {
+    if (!isValidObjectId(req.params.userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
     try {
         const result = await UserWatchlist.findOneAndDelete({ user: req.params.userId });
-        if (result) {
-            res.json({ message: 'User watchlist deleted' });
-        } else {
-            res.status(404).json({ message: 'User watchlist not found' });
+        if (!result) {
+            return res.status(404).json({ message: 'User watchlist not found' });
         }
+        res.json({ message: 'User watchlist deleted' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

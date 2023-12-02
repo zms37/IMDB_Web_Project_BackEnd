@@ -1,16 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../models/user'); // Import User model
 
-// Mock users data
-let users = [
-    { id: 1, name: 'User 1' },
-    { id: 2, name: 'User 2' },
-    // ... add more users as needed
-];
-
-// Get all users
-router.get('/', (req, res) => {
-    res.json(users);
+router.get('/', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 });
 
 // Get a user by id
