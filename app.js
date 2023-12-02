@@ -66,6 +66,7 @@ app.use('/api/auth', authRoutes);
 
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, '../IMDB_Clone_FrontEnd/build')));
+app.use('/images', express.static('public/images'));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../IMDB_Clone_FrontEnd/build', 'index.html'));
