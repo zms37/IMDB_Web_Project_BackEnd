@@ -4,7 +4,9 @@ const directorSchema = new mongoose.Schema({
     id: Number,
     name: String,
     biography: String,
-    dateOfBirth: Date
+    dateOfBirth: Date,
+    posterImage: String
+
 });
 
 module.exports = mongoose.model('Director', directorSchema);
