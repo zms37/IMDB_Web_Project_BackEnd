@@ -71,4 +71,28 @@ router.delete('/:userId', async (req, res) => {
     }
 });
 
+// Delete a movie from a user's watchlist
+router.delete('/:userId/:movieId', async (req, res) => {
+    if (!isValidObjectId(req.params.userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+    if (!isValidObjectId(req.params.movieId)) {
+        return res.status(400).json({ message: 'Invalid movie ID' });
+    }
+
+    try {
+        const watchlist = await UserWatchlist.findOne({ user: req.params.userId });
+        if (!watchlist) {
+            return res.status(404).json({ message: 'User watchlist not found' });
+        }
+
+        // Remove the movieId from the array
+        watchlist.movies = watchlist.movies.filter(movieId => movieId.toString() !== req.params.movieId);
+        await watchlist.save();
+        res.json(watchlist);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;
