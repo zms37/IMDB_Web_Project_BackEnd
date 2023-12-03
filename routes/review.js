@@ -37,7 +37,13 @@ router.post('/', async (req, res) => {
 
 // Update a review
 router.patch('/:id', getReview, async (req, res) => {
-    // ... existing update logic ...
+    if (req.body.rating != null) {
+        res.review.rating = req.body.rating;
+    }
+    if (req.body.content != null) {
+        res.review.content = req.body.content;
+    }
+    // Add more fields as needed
 
     try {
         const updatedReview = await res.review.save();
@@ -59,6 +65,7 @@ router.delete('/:id', getReview, async (req, res) => {
 
 // Middleware to get review by ID
 async function getReview(req, res, next) {
+    let review;
     try {
         review = await Review.findById(req.params.id).populate('user').populate('movie');
         if (review == null) {
@@ -84,6 +91,5 @@ router.get('/movie/:movieId', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-
 
 module.exports = router;
