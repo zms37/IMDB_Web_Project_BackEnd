@@ -31,15 +31,26 @@ router.post('/:userId', async (req, res) => {
 
     try {
         let watchlist = await UserWatchlist.findOne({ user: req.params.userId });
+        
         if (!watchlist) {
-            watchlist = new UserWatchlist({ user: req.params.userId, movies: req.body.movies });
+            // Create a new watchlist
+            watchlist = new UserWatchlist({ 
+                user: req.params.userId, 
+                movies: req.body.movieId ? [req.body.movieId] : [] 
+            });
         } else {
-            watchlist.movies = req.body.movies;
+            // Update the existing watchlist
+            if (req.body.movieId) {
+                // Here you can decide whether to append the new movieId, replace the array, etc.
+                // This example simply adds the new movieId to the array
+                watchlist.movies.push(req.body.movieId);
+            }
         }
+
         const updatedWatchlist = await watchlist.save();
         res.status(201).json(updatedWatchlist);
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 });
 
