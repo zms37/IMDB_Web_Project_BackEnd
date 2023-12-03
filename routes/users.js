@@ -54,20 +54,29 @@ router.post('/', async (req, res) => {
 });
 
 // Update a user
+// PUT /api/users/:id
 router.put('/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
-        if (!user) return res.status(404).send('The user with the given ID was not found.');
-
-        // Update fields as necessary
-        user.name = req.body.name;
-        // Other fields...
-
-        const updatedUser = await user.save();
-        res.json(updatedUser);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).send('User not found');
     }
+
+    if (req.body.username) {
+      user.username = req.body.username;
+    }
+
+    if (req.body.gender) {
+      user.gender = req.body.gender;
+    }
+
+    // Add other fields as necessary
+
+    await user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 
 // Delete a user
